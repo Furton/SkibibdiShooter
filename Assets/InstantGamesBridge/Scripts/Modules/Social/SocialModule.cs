@@ -93,18 +93,6 @@ namespace InstantGamesBridge.Modules.Social
 #endif
             }
         }
-        
-        public bool isExternalLinksAllowed
-        {
-            get
-            {
-#if !UNITY_EDITOR
-                return InstantGamesBridgeIsExternalLinksAllowed() == "true";
-#else
-                return false;
-#endif
-            }
-        }
 
 #if !UNITY_EDITOR
         [DllImport("__Internal")]
@@ -127,9 +115,6 @@ namespace InstantGamesBridge.Modules.Social
 
         [DllImport("__Internal")]
         private static extern string InstantGamesBridgeIsRateSupported();
-
-        [DllImport("__Internal")]
-        private static extern string InstantGamesBridgeIsExternalLinksAllowed();
 
         [DllImport("__Internal")]
         private static extern void InstantGamesBridgeShare(string options);
@@ -177,7 +162,7 @@ namespace InstantGamesBridge.Modules.Social
         public void Share(params SharePlatformDependedOptions[] platformDependedOptions)
         {
 #if !UNITY_EDITOR
-            InstantGamesBridgeShare(platformDependedOptions.ToJson());
+            InstantGamesBridgeShare(platformDependedOptions.ToJson().SurroundWithBraces().Fix());
 #else
             OnShareCompleted("false");
 #endif
@@ -202,7 +187,7 @@ namespace InstantGamesBridge.Modules.Social
         public void JoinCommunity(params JoinCommunityPlatformDependedOptions[] platformDependedOptions)
         {
 #if !UNITY_EDITOR
-            InstantGamesBridgeJoinCommunity(platformDependedOptions.ToJson());
+            InstantGamesBridgeJoinCommunity(platformDependedOptions.ToJson().SurroundWithBraces().Fix());
 #else
             OnJoinCommunityCompleted("false");
 #endif
@@ -217,7 +202,7 @@ namespace InstantGamesBridge.Modules.Social
         public void CreatePost(params CreatePostPlatformDependedOptions[] platformDependedOptions)
         {
 #if !UNITY_EDITOR
-            InstantGamesBridgeCreatePost(platformDependedOptions.ToJson());
+            InstantGamesBridgeCreatePost(platformDependedOptions.ToJson().SurroundWithBraces().Fix());
 #else
             OnCreatePostCompleted("false");
 #endif

@@ -1,5 +1,4 @@
 ﻿using System;
-using InstantGamesBridge.Common;
 
 namespace InstantGamesBridge.Modules.Advertisement
 {
@@ -8,7 +7,7 @@ namespace InstantGamesBridge.Modules.Advertisement
     {
         public ShowInterstitialVkOptions(bool ignoreDelay) : base(ignoreDelay)
         {
-            _targetPlatformId = PlatformId.VK;
+            _targetPlatform = OptionsTargetPlatform.VK;
         }
     }
 }

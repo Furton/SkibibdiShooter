@@ -10,13 +10,15 @@ namespace InstantGamesBridge.Modules.Advertisement
 
         public ShowBannerVkOptions(VkBannerPosition position)
         {
-            _targetPlatformId = PlatformId.VK;
+            _targetPlatform = OptionsTargetPlatform.VK;
             this.position = position;
         }
 
-        protected override string Serialize()
+        public new string ToJson()
         {
-            return position.ToString().ToLower().SurroundWithKey("position", true).SurroundWithBraces();
+            return position.ToString().ToLower().SurroundWithKey("position")
+                .SurroundWithKey(_targetPlatform.ToString().ToLower())
+                .SurroundWithBraces();
         }
     }
 }

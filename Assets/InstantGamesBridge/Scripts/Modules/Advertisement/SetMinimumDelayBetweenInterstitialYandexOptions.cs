@@ -1,5 +1,4 @@
 ﻿using System;
-using InstantGamesBridge.Common;
 
 namespace InstantGamesBridge.Modules.Advertisement
 {
@@ -8,7 +7,7 @@ namespace InstantGamesBridge.Modules.Advertisement
     {
         public SetMinimumDelayBetweenInterstitialYandexOptions(int seconds) : base(seconds)
         {
-            _targetPlatformId = PlatformId.Yandex;
+            _targetPlatform = OptionsTargetPlatform.Yandex;
         }
     }
 }

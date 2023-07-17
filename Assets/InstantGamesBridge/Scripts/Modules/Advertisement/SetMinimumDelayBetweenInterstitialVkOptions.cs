@@ -1,5 +1,4 @@
 ﻿using System;
-using InstantGamesBridge.Common;
 
 namespace InstantGamesBridge.Modules.Advertisement
 {
@@ -8,7 +7,7 @@ namespace InstantGamesBridge.Modules.Advertisement
     {
         public SetMinimumDelayBetweenInterstitialVkOptions(int seconds) : base(seconds)
         {
-            _targetPlatformId = PlatformId.VK;
+            _targetPlatform = OptionsTargetPlatform.VK;
         }
     }
 }

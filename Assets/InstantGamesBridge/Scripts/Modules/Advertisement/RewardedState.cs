@@ -2,7 +2,7 @@
 {
     public enum RewardedState
     {
-        Loading,
+        None,
         Opened,
         Rewarded,
         Closed,

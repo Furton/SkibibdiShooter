@@ -11,10 +11,5 @@ namespace InstantGamesBridge.Modules.Advertisement
         {
             this.seconds = seconds;
         }
-
-        protected override string Serialize()
-        {
-            return seconds.ToString();
-        }
     }
 }

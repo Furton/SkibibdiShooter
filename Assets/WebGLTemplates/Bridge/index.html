@@ -23,13 +23,6 @@
                 top: 0px;
                 left: 0px;
             }
-            #banner-container {
-                position: absolute;
-                bottom: 0px;
-                width: 100%;
-                height: 90px;
-                display: none;
-            }
             #loading-overlay {
                 font-size: 20px;
                 z-index: 1;
@@ -69,7 +62,6 @@
     </head>
     <body>
         <canvas id="canvas" class="fullscreen"></canvas>
-        <div id="banner-container"></div>
         <div id="loading-overlay" class="fullscreen">
             <img id="icon" src="./icon.png" />
             <div id="progress-bar"><div id="progress-bar-fill"></div></div>
@@ -86,7 +78,6 @@
             let canvas = document.getElementById('canvas')
             let loadingOverlay = document.getElementById('loading-overlay')
             let progressBarFill = document.getElementById('progress-bar-fill')
-            let bannerContainer = document.getElementById('banner-container')
 
             const STORAGE_DATA_SEPARATOR = '{bridge_data_separator}'
             const STORAGE_KEYS_SEPARATOR = '{bridge_keys_separator}'
@@ -129,7 +120,7 @@
                         currentPercent = 100
                     }
 
-                    progressBarFill.style.width = `${ currentPercent }%`
+                    progressBarFill.style.width = `${ currentPercent + 1 }%`
 
                     if (currentPercent >= 100) {
                         clearInterval(progressBarFillingInterval)
@@ -145,21 +136,10 @@
             })
 
 
-            let bridgeOptions = {
-                platforms: {
-#if GAME_DISTRIBUTION_GAME_ID && GAME_DISTRIBUTION_GAME_ID !== '-' && GAME_DISTRIBUTION_GAME_ID !== ' '
-                    'game_distribution': {
-                        gameId: '{{{ GAME_DISTRIBUTION_GAME_ID }}}'
-                    }
-#endif
-                }
-            }
-
             // initialization
             bridge
-                .initialize(bridgeOptions)
+                .initialize()
                 .then(() => {
-                    bridge.advertisement.on('banner_state_changed', state => sendMessageToUnity('OnBannerStateChanged', state))
                     bridge.advertisement.on('interstitial_state_changed', state => sendMessageToUnity('OnInterstitialStateChanged', state))
                     bridge.advertisement.on('rewarded_state_changed', state => sendMessageToUnity('OnRewardedStateChanged', state))
                     bridge.game.on('visibility_state_changed', state => sendMessageToUnity('OnVisibilityStateChanged', state))
@@ -210,6 +190,11 @@
                 return bridge.platform.language
             }
 
+            window.getPlatformDomen = function () {
+                return bridge.platform.sdk.environment.i18n.tld
+            }
+
+
             window.getPlatformPayload = function() {
                 let payload = bridge.platform.payload
                 if (typeof payload === 'string') {
@@ -217,19 +202,6 @@
                 } else {
                     return ''
                 }
-            }
-
-            window.getPlatformTld = function() {
-                let tld = bridge.platform.tld
-                if (typeof tld === 'string') {
-                    return tld
-                } else {
-                    return ''
-                }
-            }
-
-            window.sendMessageToPlatform = function(message) {
-                bridge.platform.sendMessage(message)
             }
 
 
@@ -273,11 +245,7 @@
             }
 
             window.authorizePlayer = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.player.authorize(options)
+                bridge.player.authorize(JSON.parse(options))
                     .then(() => {
                         sendMessageToUnity('OnAuthorizeCompleted', 'true')
                     })
@@ -300,10 +268,6 @@
 
             window.getIsStorageSupported = function(storageType) {
                 return bridge.storage.isSupported(storageType).toString()
-            }
-
-            window.getIsStorageAvailable = function(storageType) {
-                return bridge.storage.isAvailable(storageType).toString()
             }
 
             window.getStorageData = function(key, storageType) {
@@ -375,6 +339,10 @@
             window.getIsBannerSupported = function() {
                 return bridge.advertisement.isBannerSupported.toString()
             }
+
+            window.getIsBannerShowing = function() {
+                return bridge.advertisement.isBannerShowing.toString()
+            }
             
             window.getMinimumDelayBetweenInterstitial = function() {
                 return bridge.advertisement.minimumDelayBetweenInterstitial.toString()
@@ -385,45 +353,43 @@
             }
 
             window.showBanner = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                } else {
-                    options = { }
-                }
-
-                if (bridge.platform.id === bridge.PLATFORM_ID.CRAZY_GAMES || bridge.platform.id === bridge.PLATFORM_ID.GAME_DISTRIBUTION) {
-                    bannerContainer.style.display = 'block'
-                }
-
-                options['crazy_games'] = {
-                    containerId: 'banner-container'
-                }
-
-                options['game_distribution'] = {
-                    containerId: 'banner-container'
-                }
-
-                bridge.advertisement.showBanner(options)
+                bridge.advertisement.showBanner(JSON.parse(options))
+                    .then(() => {
+                        sendMessageToUnity('OnShowBannerCompleted', 'true')
+                    })
+                    .catch(error => {
+                        sendMessageToUnity('OnShowBannerCompleted', 'false')
+                    })
             }
 
             window.hideBanner = function() {
-                if (bridge.platform.id === bridge.PLATFORM_ID.CRAZY_GAMES || bridge.platform.id === bridge.PLATFORM_ID.GAME_DISTRIBUTION) {
-                    bannerContainer.style.display = 'none'
-                }
-
                 bridge.advertisement.hideBanner()
+                    .then(() => {
+                        sendMessageToUnity('OnHideBannerCompleted', 'true')
+                    })
+                    .catch(error => {
+                        sendMessageToUnity('OnHideBannerCompleted', 'false')
+                    })
             }
 
             window.showInterstitial = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.advertisement.showInterstitial(options)
+                bridge.advertisement.showInterstitial(JSON.parse(options))
+                    .then(() => {
+                        sendMessageToUnity('OnShowInterstitialCompleted', 'true')
+                    })
+                    .catch(error => {
+                        sendMessageToUnity('OnShowInterstitialCompleted', 'false')
+                    })
             }
 
             window.showRewarded = function() {
                 bridge.advertisement.showRewarded()
+                    .then(() => {
+                        sendMessageToUnity('OnShowRewardedCompleted', 'true')
+                    })
+                    .catch(error => {
+                        sendMessageToUnity('OnShowRewardedCompleted', 'false')
+                    })
             }
 
 
@@ -456,16 +422,8 @@
                 return bridge.social.isRateSupported.toString()
             }
 
-            window.getIsExternalLinksAllowed = function() {
-                return bridge.social.isExternalLinksAllowed.toString()
-            }
-
             window.share = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.social.share(options)
+                bridge.social.share(JSON.parse(options))
                     .then(() => {
                         sendMessageToUnity('OnShareCompleted', 'true')
                     })
@@ -485,11 +443,7 @@
             }
 
             window.joinCommunity = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.social.joinCommunity(options)
+                bridge.social.joinCommunity(JSON.parse(options))
                     .then(() => {
                         sendMessageToUnity('OnJoinCommunityCompleted', 'true')
                     })
@@ -499,11 +453,7 @@
             }
 
             window.createPost = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.social.createPost(options)
+                bridge.social.createPost(JSON.parse(options))
                     .then(() => {
                         sendMessageToUnity('OnCreatePostCompleted', 'true')
                     })
@@ -569,11 +519,7 @@
             }
 
             window.leaderboardSetScore = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.leaderboard.setScore(options)
+                bridge.leaderboard.setScore(JSON.parse(options))
                     .then(() => {
                         sendMessageToUnity('OnLeaderboardSetScoreCompleted', 'true')
                     })
@@ -583,11 +529,7 @@
             }
 
             window.leaderboardGetScore = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.leaderboard.getScore(options)
+                bridge.leaderboard.getScore(JSON.parse(options))
                     .then(data => {
                         if (data) {
                             if (typeof data !== 'string') {
@@ -605,11 +547,7 @@
             }
 
             window.leaderboardGetEntries = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.leaderboard.getEntries(options)
+                bridge.leaderboard.getEntries(JSON.parse(options))
                     .then(data => {
                         if (data) {
                             if (typeof data !== 'string') {
@@ -627,11 +565,7 @@
             }
 
             window.leaderboardShowNativePopup = function(options) {
-                if (options) {
-                    options = JSON.parse(options)
-                }
-
-                bridge.leaderboard.showNativePopup(options)
+                bridge.leaderboard.showNativePopup(JSON.parse(options))
                     .then(() => {
                         sendMessageToUnity('OnLeaderboardShowNativePopupCompleted', 'true')
                     })

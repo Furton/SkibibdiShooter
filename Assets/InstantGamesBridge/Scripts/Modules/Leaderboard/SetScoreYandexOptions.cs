@@ -1,6 +1,4 @@
 ﻿using System;
-using InstantGamesBridge.Common;
-using UnityEngine;
 
 namespace InstantGamesBridge.Modules.Leaderboard
 {
@@ -13,14 +11,9 @@ namespace InstantGamesBridge.Modules.Leaderboard
 
         public SetScoreYandexOptions(int score, string leaderboardName)
         {
-            _targetPlatformId = PlatformId.Yandex;
+            _targetPlatform = OptionsTargetPlatform.Yandex;
             this.score = score;
             this.leaderboardName = leaderboardName;
-        }
-        
-        protected override string Serialize()
-        {
-            return JsonUtility.ToJson(this);
         }
     }
 }

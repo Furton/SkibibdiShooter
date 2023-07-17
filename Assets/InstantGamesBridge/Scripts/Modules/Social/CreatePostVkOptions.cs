@@ -1,6 +1,4 @@
 ﻿using System;
-using InstantGamesBridge.Common;
-using UnityEngine;
 
 namespace InstantGamesBridge.Modules.Social
 {
@@ -13,14 +11,9 @@ namespace InstantGamesBridge.Modules.Social
 
         public CreatePostVkOptions(string message, string attachments)
         {
-            _targetPlatformId = PlatformId.VK;
+            _targetPlatform = OptionsTargetPlatform.VK;
             this.message = message;
             this.attachments = attachments;
-        }
-
-        protected override string Serialize()
-        {
-            return JsonUtility.ToJson(this);
         }
     }
 }

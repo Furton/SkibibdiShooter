@@ -16,24 +16,20 @@ mergeInto(LibraryManager.library, {
         return buffer
     },
 
+    InstantGamesBridgeGetPlatformDomen: function() {
+        var platformDomen = window.getPlatformDomen()
+        var bufferSize = lengthBytesUTF8(platformDomen) + 1
+        var buffer = _malloc(bufferSize)
+        stringToUTF8(platformDomen, buffer, bufferSize)
+        return buffer
+    },
+
     InstantGamesBridgeGetPlatformPayload: function() {
         var platformPayload = window.getPlatformPayload()
         var bufferSize = lengthBytesUTF8(platformPayload) + 1
         var buffer = _malloc(bufferSize)
         stringToUTF8(platformPayload, buffer, bufferSize)
         return buffer
-    },
-    
-    InstantGamesBridgeGetPlatformTld: function() {
-        var platformTld = window.getPlatformTld()
-        var bufferSize = lengthBytesUTF8(platformTld) + 1
-        var buffer = _malloc(bufferSize)
-        stringToUTF8(platformTld, buffer, bufferSize)
-        return buffer
-    },
-    
-    InstantGamesBridgeSendMessageToPlatform: function(message) {
-        window.sendMessageToPlatform(UTF8ToString(message))
     },
 
 
@@ -116,14 +112,6 @@ mergeInto(LibraryManager.library, {
         return buffer
     },
 
-    InstantGamesBridgeIsStorageAvailable: function(storageType) {
-        var isStorageAvailable = window.getIsStorageAvailable(UTF8ToString(storageType))
-        var bufferSize = lengthBytesUTF8(isStorageAvailable) + 1
-        var buffer = _malloc(bufferSize)
-        stringToUTF8(isStorageAvailable, buffer, bufferSize)
-        return buffer
-    },
-
     InstantGamesBridgeGetStorageData: function(key, storageType) {
         window.getStorageData(UTF8ToString(key), UTF8ToString(storageType))
     },
@@ -142,6 +130,14 @@ mergeInto(LibraryManager.library, {
         var bufferSize = lengthBytesUTF8(isBannerSupported) + 1
         var buffer = _malloc(bufferSize)
         stringToUTF8(isBannerSupported, buffer, bufferSize)
+        return buffer
+    },
+    
+    InstantGamesBridgeIsBannerShowing: function() {
+        var isBannerShowing = window.getIsBannerShowing()
+        var bufferSize = lengthBytesUTF8(isBannerShowing) + 1
+        var buffer = _malloc(bufferSize)
+        stringToUTF8(isBannerShowing, buffer, bufferSize)
         return buffer
     },
 
@@ -227,14 +223,6 @@ mergeInto(LibraryManager.library, {
         var bufferSize = lengthBytesUTF8(isRateSupported) + 1
         var buffer = _malloc(bufferSize)
         stringToUTF8(isRateSupported, buffer, bufferSize)
-        return buffer
-    },
-
-    InstantGamesBridgeIsExternalLinksAllowed: function() {
-        var isExternalLinksAllowed = window.getIsExternalLinksAllowed()
-        var bufferSize = lengthBytesUTF8(isExternalLinksAllowed) + 1
-        var buffer = _malloc(bufferSize)
-        stringToUTF8(isExternalLinksAllowed, buffer, bufferSize)
         return buffer
     },
 

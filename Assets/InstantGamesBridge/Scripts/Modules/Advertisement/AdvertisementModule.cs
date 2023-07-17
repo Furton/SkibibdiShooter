@@ -1,8 +1,8 @@
 ﻿#if UNITY_WEBGL
 using System;
 using UnityEngine;
-using InstantGamesBridge.Common;
 #if !UNITY_EDITOR
+using InstantGamesBridge.Common;
 using System.Runtime.InteropServices;
 #endif
 
@@ -10,17 +10,13 @@ namespace InstantGamesBridge.Modules.Advertisement
 {
     public class AdvertisementModule : MonoBehaviour
     {
-        public event Action<BannerState> bannerStateChanged;
-        
         public event Action<InterstitialState> interstitialStateChanged;
 
         public event Action<RewardedState> rewardedStateChanged;
 
-        public BannerState bannerState { get; private set; } = BannerState.Hidden;
+        public InterstitialState interstitialState { get; private set; }
 
-        public InterstitialState interstitialState { get; private set; } = InterstitialState.Closed;
-
-        public RewardedState rewardedState { get; private set; } = RewardedState.Closed;
+        public RewardedState rewardedState { get; private set; }
 
         public int minimumDelayBetweenInterstitial
         {
@@ -47,11 +43,19 @@ namespace InstantGamesBridge.Modules.Advertisement
             }
         }
         
-#if UNITY_EDITOR
-        private int _minimumDelayBetweenInterstitial;
-
-        private DateTime _lastInterstitialShownTimestamp = DateTime.MinValue;
+        public bool isBannerShowing
+        {
+            get
+            {
+#if !UNITY_EDITOR
+                return InstantGamesBridgeIsBannerShowing() == "true";
 #else
+                return false;
+#endif
+            }
+        }
+
+#if !UNITY_EDITOR
         [DllImport("__Internal")]
         private static extern string InstantGamesBridgeMinimumDelayBetweenInterstitial();
 
@@ -66,6 +70,9 @@ namespace InstantGamesBridge.Modules.Advertisement
 
         [DllImport("__Internal")]
         private static extern string InstantGamesBridgeIsBannerSupported();
+
+        [DllImport("__Internal")]
+        private static extern string InstantGamesBridgeIsBannerShowing();
         
         [DllImport("__Internal")]
         private static extern void InstantGamesBridgeShowBanner(string options);
@@ -74,24 +81,39 @@ namespace InstantGamesBridge.Modules.Advertisement
         private static extern void InstantGamesBridgeHideBanner();
 #endif
 
+        private Action<bool> _showBannerCallback;
         
-        public void ShowBanner(params ShowBannerPlatformDependedOptions[] otherPlatformDependedOptions)
+        private Action<bool> _hideBannerCallback;
+        
+        private Action<bool> _showInterstitialCallback;
+
+        private Action<bool> _showRewardedCallback;
+
+#if UNITY_EDITOR
+        private int _minimumDelayBetweenInterstitial;
+
+        private DateTime _lastInterstitialShownTimestamp = DateTime.MinValue;
+#endif
+
+
+        public void ShowBanner(Action<bool> onComplete = null, params ShowBannerPlatformDependedOptions[] otherPlatformDependedOptions)
         {
+            _showBannerCallback = onComplete;
 #if !UNITY_EDITOR
             var options = otherPlatformDependedOptions.ToJson();
-            InstantGamesBridgeShowBanner(options);
+            InstantGamesBridgeShowBanner(options.SurroundWithBraces().Fix());
 #else
-            OnBannerStateChanged(BannerState.Loading.ToString());
-            OnBannerStateChanged(BannerState.Shown.ToString());
+            OnShowBannerCompleted("false");
 #endif
         }
 
-        public void HideBanner()
+        public void HideBanner(Action<bool> onComplete = null)
         {
+            _hideBannerCallback = onComplete;
 #if !UNITY_EDITOR
             InstantGamesBridgeHideBanner();
 #else
-            OnBannerStateChanged(BannerState.Hidden.ToString());
+            OnHideBannerCompleted("false");
 #endif
         }
 
@@ -112,31 +134,39 @@ namespace InstantGamesBridge.Modules.Advertisement
             var other = otherPlatformDependedOptions.ToJson();
             if (!string.IsNullOrEmpty(other)) {
                 options += ", " + other;
-                options.SurroundWithBraces();
             }
 
-            InstantGamesBridgeSetMinimumDelayBetweenInterstitial(options);
+            InstantGamesBridgeSetMinimumDelayBetweenInterstitial(options.SurroundWithBraces().Fix());
 #endif
         }
 
-        public void ShowInterstitial(bool ignoreDelay = false)
+        public void ShowInterstitial(bool ignoreDelay = false, Action<bool> onComplete = null)
         {
+            _showInterstitialCallback = onComplete;
+
 #if !UNITY_EDITOR
-            var json = ignoreDelay.ToString().SurroundWithKey("ignoreDelay").FixBooleans().SurroundWithBraces();
+            var json = ignoreDelay.ToString().SurroundWithKey("ignoreDelay").SurroundWithBraces().Fix();
             InstantGamesBridgeShowInterstitial(json);
 #else
             var delta = DateTime.Now - _lastInterstitialShownTimestamp;
             if (delta.TotalSeconds > _minimumDelayBetweenInterstitial || ignoreDelay)
             {
-                OnInterstitialStateChanged(InterstitialState.Loading.ToString());
+                OnShowInterstitialCompleted("true");
                 OnInterstitialStateChanged(InterstitialState.Opened.ToString());
                 OnInterstitialStateChanged(InterstitialState.Closed.ToString());
             }
             else
             {
+                OnShowInterstitialCompleted("false");
                 OnInterstitialStateChanged(InterstitialState.Failed.ToString());
             }
 #endif
+        }
+
+        public void ShowInterstitial(Action<bool> onComplete, ShowInterstitialPlatformDependedOptions firstPlatformDependedOptions, params ShowInterstitialPlatformDependedOptions[] otherPlatformDependedOptions)
+        {
+            _showInterstitialCallback = onComplete;
+            ShowInterstitial(firstPlatformDependedOptions, otherPlatformDependedOptions);
         }
 
         public void ShowInterstitial(ShowInterstitialPlatformDependedOptions firstPlatformDependedOptions, params ShowInterstitialPlatformDependedOptions[] otherPlatformDependedOptions)
@@ -146,37 +176,65 @@ namespace InstantGamesBridge.Modules.Advertisement
             var other = otherPlatformDependedOptions.ToJson();
             if (!string.IsNullOrEmpty(other)) {
                 options += ", " + other;
-                options.SurroundWithBraces();
             }
 
-            InstantGamesBridgeShowInterstitial(options);
+            InstantGamesBridgeShowInterstitial(options.SurroundWithBraces().Fix());
 #else
-            OnInterstitialStateChanged(InterstitialState.Loading.ToString());
+            OnShowInterstitialCompleted("true");
             OnInterstitialStateChanged(InterstitialState.Opened.ToString());
             OnInterstitialStateChanged(InterstitialState.Closed.ToString());
 #endif
         }
 
-        public void ShowRewarded()
+        public void ShowRewarded(Action<bool> onComplete = null)
         {
+            _showRewardedCallback = onComplete;
 #if !UNITY_EDITOR
             InstantGamesBridgeShowRewarded();
 #else
-            OnRewardedStateChanged(RewardedState.Loading.ToString());
+            OnShowRewardedCompleted("true");
             OnRewardedStateChanged(RewardedState.Opened.ToString());
             OnRewardedStateChanged(RewardedState.Rewarded.ToString());
             OnRewardedStateChanged(RewardedState.Closed.ToString());
 #endif
         }
-        
-        
-        private void OnBannerStateChanged(string value)
+
+
+        // Called from JS
+        private void OnShowBannerCompleted(string result)
         {
-            if (Enum.TryParse<BannerState>(value, true, out var state))
+            var isSuccess = result == "true";
+            _showBannerCallback?.Invoke(isSuccess);
+            _showBannerCallback = null;
+        }
+        
+        private void OnHideBannerCompleted(string result)
+        {
+            var isSuccess = result == "true";
+            _hideBannerCallback?.Invoke(isSuccess);
+            _hideBannerCallback = null;
+        }
+        
+        private void OnShowInterstitialCompleted(string result)
+        {
+            var isSuccess = result == "true";
+
+#if UNITY_EDITOR
+            if (isSuccess)
             {
-                bannerState = state;
-                bannerStateChanged?.Invoke(bannerState);
+                _lastInterstitialShownTimestamp = DateTime.Now;
             }
+#endif
+
+            _showInterstitialCallback?.Invoke(isSuccess);
+            _showInterstitialCallback = null;
+        }
+
+        private void OnShowRewardedCompleted(string result)
+        {
+            var isSuccess = result == "true";
+            _showRewardedCallback?.Invoke(isSuccess);
+            _showRewardedCallback = null;
         }
 
         private void OnInterstitialStateChanged(string value)
@@ -185,13 +243,6 @@ namespace InstantGamesBridge.Modules.Advertisement
             {
                 interstitialState = state;
                 interstitialStateChanged?.Invoke(interstitialState);
-                
-#if UNITY_EDITOR
-                if (interstitialState == InterstitialState.Closed)
-                {
-                    _lastInterstitialShownTimestamp = DateTime.Now;
-                }
-#endif
             }
         }
 
