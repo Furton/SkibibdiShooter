@@ -8,21 +8,33 @@ public class Priz : MonoBehaviour
     public Data data;
     public Text text;
     private float timer;
+    private float speed;
+
     private void OnEnable()
     {
-        timer = 50;
+        timer = 60;
+        speed = 1;
     }
 
     public void AdPatroni()
     {
         data.bulets += (int)timer;
+        SaveAndLoad.Instance.Save();
     }
+
+
     void Update()
     {
-        text.text = "+ " + (int)timer;
-        if (timer > 0)
+
+        if (timer <= 10)
         {
-            timer -= Time.unscaledDeltaTime;
+            speed = -1;
         }
+        if (timer >= 60)
+        {
+            speed = 1;
+        }
+        timer -= speed * Time.unscaledDeltaTime;
+        text.text = "+ " + (int)timer;
     }
 }
