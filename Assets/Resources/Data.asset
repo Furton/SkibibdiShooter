@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7976fce0763785040bd30fd04ba06b1f, type: 3}
+  m_Name: Data
+  m_EditorClassIdentifier: 
+  record: 2
+  coins: 11
+  sceneNumber: 3
+  coalNumber: 0
+  cooperNumber: 0
+  titanNumber: 0
+  sulfurNumber: 0
+  leadNumber: 4
+  bronzeNumber: 0
+  powderNumber: 250
+  plasticNumber: 0
+  damageHandsMinigun: 4
+  damageHandsPistoll: 2
+  damageDrobovik: 6
+  levelHandsMinigun: 1
+  levelHandsPistoll: 1
+  levelDrobovik: 4
+  currentWeapon: 2
+  bullet: 41
+  healItems: 10
+  sens: 0.8
+  questChainNumber: 0
