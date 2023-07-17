@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SoundButton : MonoBehaviour
+public class SoundButton: MonoBehaviour
 {
     public Sprite soundIsOn, soundIsOff;
     public Data data;
