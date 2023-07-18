@@ -6,7 +6,6 @@ using InstantGamesBridge;
 
 public class Interface : MonoBehaviour
 {
-    public ShowInter se;
     public UnityEvent gameer, menue, gamover, skill, andLVL, nullBK;
     public static Interface rid { get; set; }
     void Awake()
@@ -74,7 +73,6 @@ public class Interface : MonoBehaviour
         if (Time.timeScale > 0)
         {
             Time.timeScale = 0;
-            se.Showreklame();
         }
         Lock(false);
 

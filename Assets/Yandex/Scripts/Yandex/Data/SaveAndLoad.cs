@@ -28,7 +28,7 @@ public class SaveAndLoad : MonoBehaviour
         Bridge.storage.Get(id, OnGetCompleted);
     }
 
-    private void Save()
+    public void Save()
     {
         if (Time.unscaledTime >= time + 5f)
         {

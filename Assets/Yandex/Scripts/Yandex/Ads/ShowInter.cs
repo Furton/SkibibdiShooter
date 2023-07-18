@@ -17,10 +17,10 @@ public class ShowInter : MonoBehaviour, IEventReceiver<ShowInterAds>
         Bridge.advertisement.interstitialStateChanged += Interstitial;
         EventBus.Register(this);
 
-        EventBus<ShowInterAds>.Raise(new ShowInterAds()
+        /*EventBus<ShowInterAds>.Raise(new ShowInterAds()
         {
 
-        });
+        });*/
     }
 
     void OnDestroy()
@@ -29,10 +29,8 @@ public class ShowInter : MonoBehaviour, IEventReceiver<ShowInterAds>
         EventBus.UnRegister(this);
     }
 
-    void Awake()
-    {
-        Showreklame();
-    }
+
+
     public void Showreklame()
     {
         var ignoreDelay = false;
