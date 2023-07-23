@@ -8,7 +8,7 @@ using InstantGamesBridge;
 public class AutoSave : MonoBehaviour
 {
     public GameObject adsPanel, pauseObject;
-    public Text adsPanelText;
+    public Text pauseText;
     public Language adsPanelL;
 
 
@@ -21,7 +21,7 @@ public class AutoSave : MonoBehaviour
 
 
 
-        _time = Time.unscaledTime - 60f;
+        _time = Time.unscaledTime - 70f;
 
         if (Bridge.platform.language == "ru")
         {
@@ -58,18 +58,22 @@ public class AutoSave : MonoBehaviour
 
     private IEnumerator ShowEnum()
     {
-        adsPanel.SetActive(true);
-        adsPanelText.text = adsPanelLString + " 3";
-        yield return new WaitForSecondsRealtime(1f);
-        adsPanelText.text = adsPanelLString + " 2";
-        yield return new WaitForSecondsRealtime(1f);
-        adsPanelText.text = adsPanelLString + " 1";
         pauseObject.SetActive(true);
+        pauseText.text = adsPanelLString + " 3";
+        yield return new WaitForSecondsRealtime(1f);
+        pauseText.text = adsPanelLString + " 2";
+        yield return new WaitForSecondsRealtime(1f);
+        pauseText.text = adsPanelLString + " 1";
+        adsPanel.SetActive(true);
         Time.timeScale = 0;
+        Muwer.rid.muve = Vector2.zero;
+        Muwer.rid.rut = Vector2.zero;
         yield return new WaitForSecondsRealtime(1f);
         adsPanel.SetActive(false);
         pauseObject.SetActive(false);
         Time.timeScale = 1;
+        Muwer.rid.muve = Vector2.zero;
+        Muwer.rid.rut = Vector2.zero;
         EventBus<ShowInterAds>.Raise(new ShowInterAds()
         {
 

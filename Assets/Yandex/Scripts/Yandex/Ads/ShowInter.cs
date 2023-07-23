@@ -11,6 +11,7 @@ public class ShowInter : MonoBehaviour, IEventReceiver<ShowInterAds>
     public AudioSource sorse;
     public Data data;
     private float scale = 1;
+    private bool cursorState = true;
     
     void Start()
     {
@@ -65,4 +66,5 @@ public class ShowInter : MonoBehaviour, IEventReceiver<ShowInterAds>
             sorse.mute = true;
         }
     }
+
 }

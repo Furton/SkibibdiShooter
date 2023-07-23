@@ -3533,7 +3533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adsPanel: {fileID: 3969603218563120876}
   pauseObject: {fileID: 5269938452300051342}
-  adsPanelText: {fileID: 4132231765793209828}
+  pauseText: {fileID: 4132231765793209828}
   adsPanelL: {fileID: 11400000, guid: f291a22795a374d45b4aac2c31d8f0d2, type: 2}
 --- !u!1 &6811705106163835702
 GameObject:

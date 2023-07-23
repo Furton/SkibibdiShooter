@@ -40,8 +40,8 @@ public class Muwer : MonoBehaviour {
             //Time.timeScale = 0.1f + controller.velocity.magnitude / spid;
             if (Time.timeScale > 0)
             {
-                float rotationX = transform.localEulerAngles.y + rut.x * sensitivity;
-                rotationY += rut.y * sensitivity;
+                float rotationX = transform.localEulerAngles.y + rut.x * sensitivity * Time.timeScale; 
+                rotationY += rut.y * sensitivity * Time.timeScale;
                 rotationY = Mathf.Clamp(rotationY, minimumY, maximumY);
                 cam.transform.localEulerAngles = new Vector3(-rotationY, 0, 0);
                 transform.localEulerAngles = new Vector3(0, rotationX, 0);
@@ -67,8 +67,8 @@ public class Muwer : MonoBehaviour {
         }
         else
         {
-            moveDirection.y -= gravity * Time.unscaledDeltaTime;
+            moveDirection.y -= gravity * Time.deltaTime;
         }
-        controller.Move(moveDirection * Time.unscaledDeltaTime);
+        controller.Move(moveDirection * Time.deltaTime);
     }
 }
