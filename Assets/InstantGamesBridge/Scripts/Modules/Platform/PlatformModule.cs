@@ -30,7 +30,7 @@ namespace InstantGamesBridge.Modules.Platform
 #else
         public string id { get; } = "mock";
 
-        public string language { get; } = "en";
+        public string language { get; } = "ru";
 
         public string domen { get; } = "com";
 
