@@ -6712,6 +6712,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interfase
       objectReference: {fileID: 0}
+    - target: {fileID: 6726285748627364047, guid: cc3a34eb0491d4b49b902849a9746c9c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8317458708471469786, guid: cc3a34eb0491d4b49b902849a9746c9c, type: 3}
       propertyPath: m_Pivot.x
       value: 0
