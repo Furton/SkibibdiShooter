@@ -8,6 +8,8 @@ public class Interface : MonoBehaviour
 {
     public UnityEvent gameer, menue, gamover, skill, andLVL, nullBK;
     public static Interface rid { get; set; }
+    public Data data;
+
     void Awake()
     {
         if (rid == null)
@@ -75,6 +77,10 @@ public class Interface : MonoBehaviour
             Time.timeScale = 0;
         }
         Lock(false);
+        if (data.bulets <= 3)
+        {
+            data.bulets = 20;
+        }
 
     }
 

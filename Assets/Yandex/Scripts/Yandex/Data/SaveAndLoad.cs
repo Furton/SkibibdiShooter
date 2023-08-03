@@ -20,7 +20,7 @@ public class SaveAndLoad : MonoBehaviour
     [SerializeField] private Data myData;
     [SerializeField] private string id;
 
-    private float time, record;
+    private float  record;
 
 
     public void Load()
@@ -30,9 +30,6 @@ public class SaveAndLoad : MonoBehaviour
 
     public void Save()
     {
-        if (Time.unscaledTime >= time + 5f)
-        {
-            time = Time.unscaledTime;
             string data = JsonUtility.ToJson(myData);
             Bridge.storage.Set(id, data, success =>
             {
@@ -42,7 +39,6 @@ public class SaveAndLoad : MonoBehaviour
                     SetBoard();
                 }
             });
-        }
     }
 
 
@@ -80,7 +76,6 @@ public class SaveAndLoad : MonoBehaviour
         else Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-        time = Time.unscaledTime - 30f;
         record = 0;
     }
 

@@ -12,17 +12,11 @@ public class AutoSave : MonoBehaviour
     public Language adsPanelL;
 
 
-    float _time;
     string adsPanelLString, secondsString;
 
 
     void Start()
     {
-
-
-
-        _time = Time.unscaledTime - 70f;
-
         if (Bridge.platform.language == "ru")
         {
             adsPanelLString = adsPanelL.ru;
@@ -31,16 +25,26 @@ public class AutoSave : MonoBehaviour
         {
             adsPanelLString = adsPanelL.en;
         }
-
         StartCoroutine(SaveEnum());
+        StartCoroutine(AutoShowEnum());
     }
 
     private IEnumerator SaveEnum()
     {
         while (true)
         {
-            yield return new WaitForSecondsRealtime(5f);
+            yield return new WaitForSecondsRealtime(2f);
             SaveAndLoad.Instance.Save();
+        }
+    }
+
+    private IEnumerator AutoShowEnum()
+    {        
+        yield return new WaitForSecondsRealtime(9f);
+        Show();
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(80f);
             Show();
         }
     }
@@ -49,26 +53,22 @@ public class AutoSave : MonoBehaviour
 
     private void Show()
     {
-        if (Time.unscaledTime - _time >= 80f)
-        {
-            _time = Time.unscaledTime;
             StartCoroutine(ShowEnum());
-        }
     }
 
     private IEnumerator ShowEnum()
     {
         pauseObject.SetActive(true);
         pauseText.text = adsPanelLString + " 3";
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.75f);
         pauseText.text = adsPanelLString + " 2";
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.75f);
         pauseText.text = adsPanelLString + " 1";
         adsPanel.SetActive(true);
         Time.timeScale = 0;
         Muwer.rid.muve = Vector2.zero;
         Muwer.rid.rut = Vector2.zero;
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.75f);
         adsPanel.SetActive(false);
         pauseObject.SetActive(false);
         Time.timeScale = 1;
