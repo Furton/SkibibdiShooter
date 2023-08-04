@@ -5,8 +5,10 @@ using UnityEngine.UI;
 using pEventBus;
 using InstantGamesBridge;
 
-public class AutoSave : MonoBehaviour
+public class AutoSave: MonoBehaviour
 {
+    public static AutoSave Instance { get; private set; }
+
     public GameObject adsPanel, pauseObject;
     public Text pauseText;
     public Language adsPanelL;
@@ -15,6 +17,14 @@ public class AutoSave : MonoBehaviour
 
 
     string adsPanelLString, secondsString;
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
+    }
 
 
     void Start()
@@ -50,11 +60,7 @@ public class AutoSave : MonoBehaviour
         while (true)
         {
             yield return new WaitForSecondsRealtime(80f);
-            if (SaveAndLoad.Instance.isFirstLoad)
-            {
-                SaveAndLoad.Instance.isFirstLoad = false;
-                Show();
-            }
+            Show();
         }
     }
 

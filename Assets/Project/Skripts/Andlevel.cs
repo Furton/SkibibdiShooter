@@ -6,6 +6,6 @@ public class Andlevel : MonoBehaviour
 {
     public void Reload()
     {
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("Scene1");
     }
 }
