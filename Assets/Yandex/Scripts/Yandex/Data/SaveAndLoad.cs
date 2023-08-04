@@ -29,6 +29,7 @@ public class SaveAndLoad : MonoBehaviour
     {
         isFirstLoad = true;
         Bridge.storage.Get(id, OnGetCompleted);
+        StartCoroutine(TestEnum());
     }
 
     public void Save()
@@ -102,6 +103,15 @@ public class SaveAndLoad : MonoBehaviour
         {
 
         });
+    }
+
+    private IEnumerator TestEnum()
+    {
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            print("test");
+        }
     }
 
 

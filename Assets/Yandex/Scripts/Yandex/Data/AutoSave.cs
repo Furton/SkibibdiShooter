@@ -7,8 +7,6 @@ using InstantGamesBridge;
 
 public class AutoSave: MonoBehaviour
 {
-    public static AutoSave Instance { get; private set; }
-
     public GameObject adsPanel, pauseObject;
     public Text pauseText;
     public Language adsPanelL;
@@ -18,13 +16,6 @@ public class AutoSave: MonoBehaviour
 
     string adsPanelLString, secondsString;
 
-    void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
-    }
 
 
     void Start()
@@ -52,7 +43,7 @@ public class AutoSave: MonoBehaviour
 
     private IEnumerator AutoShowEnum()
     {        
-        yield return new WaitForSecondsRealtime(9f);
+        yield return new WaitForSecondsRealtime(8f);
         if (SaveAndLoad.Instance.isFirstLoad) {
             SaveAndLoad.Instance.isFirstLoad = false;
             Show();
