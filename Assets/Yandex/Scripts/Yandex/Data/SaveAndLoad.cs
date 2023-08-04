@@ -17,6 +17,8 @@ public class SaveAndLoad : MonoBehaviour
 {
     public static SaveAndLoad Instance { get; private set; }
 
+    public bool isFirstLoad = true;
+
     [SerializeField] private Data myData;
     [SerializeField] private string id;
 
@@ -25,6 +27,7 @@ public class SaveAndLoad : MonoBehaviour
 
     public void Load()
     {
+        isFirstLoad = true;
         Bridge.storage.Get(id, OnGetCompleted);
     }
 

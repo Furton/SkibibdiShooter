@@ -43,11 +43,18 @@ public class AutoSave : MonoBehaviour
     private IEnumerator AutoShowEnum()
     {        
         yield return new WaitForSecondsRealtime(9f);
-        Show();
+        if (SaveAndLoad.Instance.isFirstLoad) {
+            SaveAndLoad.Instance.isFirstLoad = false;
+            Show();
+        }
         while (true)
         {
             yield return new WaitForSecondsRealtime(80f);
-            Show();
+            if (SaveAndLoad.Instance.isFirstLoad)
+            {
+                SaveAndLoad.Instance.isFirstLoad = false;
+                Show();
+            }
         }
     }
 

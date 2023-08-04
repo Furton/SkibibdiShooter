@@ -4128,6 +4128,7 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
   data: {fileID: 11400000, guid: 2d24e1bdce643a543a1915e38c2dd049, type: 2}
+  isAds: 0
 --- !u!114 &7185786557144147874
 MonoBehaviour:
   m_ObjectHideFlags: 0
