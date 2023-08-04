@@ -29,7 +29,6 @@ public class AutoSave: MonoBehaviour
             adsPanelLString = adsPanelL.en;
         }
         StartCoroutine(SaveEnum());
-        StartCoroutine(AutoShowEnum());
     }
 
     private IEnumerator SaveEnum()
@@ -41,19 +40,7 @@ public class AutoSave: MonoBehaviour
         }
     }
 
-    private IEnumerator AutoShowEnum()
-    {        
-        yield return new WaitForSecondsRealtime(8f);
-        if (SaveAndLoad.Instance.isFirstLoad) {
-            SaveAndLoad.Instance.isFirstLoad = false;
-            Show();
-        }
-        while (true)
-        {
-            yield return new WaitForSecondsRealtime(80f);
-            Show();
-        }
-    }
+
 
 
 
@@ -88,5 +75,15 @@ public class AutoSave: MonoBehaviour
         {
 
         });
+    }
+
+    void OnEnable()
+    {
+        Events.OnShow += Show;
+    }
+
+    void OnDisable()
+    {
+        Events.OnShow -= Show;
     }
 }
