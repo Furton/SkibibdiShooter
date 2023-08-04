@@ -90,6 +90,11 @@ public class SaveAndLoad : MonoBehaviour
             SetInitValue();
         }
 
+        if (myData.bulets <= 3)
+        {
+            myData.bulets = 20;
+        }
+
         EventBus<OnLoadIsComplete>.Raise(new OnLoadIsComplete()
         {
 

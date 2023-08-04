@@ -9,6 +9,7 @@ public class Interface : MonoBehaviour
     public UnityEvent gameer, menue, gamover, skill, andLVL, nullBK;
     public static Interface rid { get; set; }
     public Data data;
+    public bool isAds = false;
 
     void Awake()
     {
@@ -39,11 +40,13 @@ public class Interface : MonoBehaviour
     }
     public void Menu()
     {
-        Muwer.rid.muve = Vector2.zero;
-        Muwer.rid.rut = Vector2.zero;
-        menue.Invoke();
-        Time.timeScale = 0;
-        Lock(false);
+        if (!isAds) {
+            Muwer.rid.muve = Vector2.zero;
+            Muwer.rid.rut = Vector2.zero;
+            menue.Invoke();
+            Time.timeScale = 0;
+            Lock(false);
+        }
     }
     public void AndLVL()
     {
@@ -64,9 +67,11 @@ public class Interface : MonoBehaviour
 
     public void Game()
     {
-        gameer.Invoke();
-        Time.timeScale = 1;
-        Lock(true);
+        if (!isAds) {
+            gameer.Invoke();
+            Time.timeScale = 1;
+            Lock(true);
+        }
 
     }
     public void GameOver()

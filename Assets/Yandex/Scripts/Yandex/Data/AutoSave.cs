@@ -11,6 +11,8 @@ public class AutoSave : MonoBehaviour
     public Text pauseText;
     public Language adsPanelL;
 
+    private float scale = 1;
+
 
     string adsPanelLString, secondsString;
 
@@ -58,6 +60,8 @@ public class AutoSave : MonoBehaviour
 
     private IEnumerator ShowEnum()
     {
+        Interface.rid.isAds = true;
+        scale = Time.timeScale;
         pauseObject.SetActive(true);
         pauseText.text = adsPanelLString + " 3";
         yield return new WaitForSecondsRealtime(0.73f);
@@ -74,6 +78,8 @@ public class AutoSave : MonoBehaviour
         Time.timeScale = 0;
         Muwer.rid.muve = Vector2.zero;
         Muwer.rid.rut = Vector2.zero;
+        Time.timeScale = scale;
+        Interface.rid.isAds = false;
         EventBus<ShowInterAds>.Raise(new ShowInterAds()
         {
 
