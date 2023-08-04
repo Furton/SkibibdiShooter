@@ -60,9 +60,9 @@ public class AutoSave : MonoBehaviour
     {
         pauseObject.SetActive(true);
         pauseText.text = adsPanelLString + " 3";
-        yield return new WaitForSecondsRealtime(0.75f);
+        yield return new WaitForSecondsRealtime(0.73f);
         pauseText.text = adsPanelLString + " 2";
-        yield return new WaitForSecondsRealtime(0.75f);
+        yield return new WaitForSecondsRealtime(0.73f);
         pauseText.text = adsPanelLString + " 1";
         adsPanel.SetActive(true);
         Time.timeScale = 0;
@@ -71,7 +71,7 @@ public class AutoSave : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.75f);
         adsPanel.SetActive(false);
         pauseObject.SetActive(false);
-        Time.timeScale = 1;
+        Time.timeScale = 0;
         Muwer.rid.muve = Vector2.zero;
         Muwer.rid.rut = Vector2.zero;
         EventBus<ShowInterAds>.Raise(new ShowInterAds()
