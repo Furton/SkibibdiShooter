@@ -66,7 +66,8 @@ public class SaveAndLoad : MonoBehaviour
     void SetInitValue()
     {
         myData.record = 1;
-        myData.bulets = 20;
+        myData.tempRecord = 1;
+        myData.bulets = 30;
         myData.soundOn = true;
     }
 
@@ -93,7 +94,7 @@ public class SaveAndLoad : MonoBehaviour
 
         if (myData.bulets <= 3)
         {
-            myData.bulets = 20;
+            myData.bulets = 25;
         }
 
         EventBus<OnLoadIsComplete>.Raise(new OnLoadIsComplete()

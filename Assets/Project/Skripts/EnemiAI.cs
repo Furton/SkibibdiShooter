@@ -18,9 +18,9 @@ public class EnemiAI : MonoBehaviour {
     {
         player = Muwer.rid.transform;
         agent.speed = speed;
-        if (data.record < 10)
+        if (data.tempRecord < 10)
         {
-            speed = 1 + data.record;
+            speed = 1 + data.tempRecord;
         }
         else
         {
@@ -63,7 +63,11 @@ public class EnemiAI : MonoBehaviour {
         int num = Random.Range(0, loot.Length);
         Instantiate(loot[num], transform.position, Quaternion.identity);
         SoundPlayer.regit.sorse.PlayOneShot(ded);
-        data.record += 1;
+        data.tempRecord += 1;
+        if (data.tempRecord > data.record)
+        {
+            data.record = data.tempRecord;
+        }
         Destroy(onDestroy);
     }
     public void Resed()

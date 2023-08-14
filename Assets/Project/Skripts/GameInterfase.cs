@@ -7,13 +7,14 @@ public class GameInterfase : MonoBehaviour
 {
     public Data data;
     public Image hPbar;
-    public Text bullets, record;
+    public Text bullets, record, tempRecord;
     private float mHalse;
 
     void Update()
     {
         hPbar.fillAmount = Gun.rid.helse / 10;
         bullets.text = "" + data.bulets;
-        record.text = "" + (data.record-1);
+        tempRecord.text = "" + (data.tempRecord-1);
+        record.text = "" + (data.record - 1);
     }
 }

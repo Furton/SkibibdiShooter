@@ -152,9 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 500bcfcfe7d0c2346a817aab72f03e41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isFirstLoad: 1
   myData: {fileID: 11400000, guid: 2d24e1bdce643a543a1915e38c2dd049, type: 2}
-  id: ZZ4
+  id: ZZ5
 --- !u!4 &624962992
 Transform:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using UnityEngine;
 public class Data: ScriptableObject
 {
     public int record;
+    public int tempRecord;
     public int bulets;
 
     public bool soundOn;

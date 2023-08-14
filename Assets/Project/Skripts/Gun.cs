@@ -9,7 +9,7 @@ public class Gun : MonoBehaviour
     public AudioClip clip, damage, ded;
     public Animator anim;
     public static Gun rid { get; set; }
-    private bool relod = false;
+
     void Awake()
     {
         if (rid == null)
@@ -27,32 +27,30 @@ public class Gun : MonoBehaviour
         rid = null;
     }
 
-    public void Ded()
+    private void Ded()
     {
-        if (!anim.GetBool("Ded"))
-        {
             Muwer muwer = Muwer.rid;
             muwer.enabled = false;
-            anim.SetBool("Ded", true);
+            anim.SetTrigger("dead");
             SoundPlayer.regit.sorse.PlayOneShot(ded);
             helse = 0;
-        }
+            Invoke("GameOver", 0.9f);
     }
-    public void GameOver()
+
+    private void GameOver()
     {
         Interface iF = Interface.rid;
         iF.GameOver();
         Destroy(this);
     }
+
+
     public void Shut() {
-        if (!relod)
-        {
             if (data.bulets > 0)
             {
                 data.bulets -= 1;
-                anim.SetBool("Shut", true);
+                anim.SetTrigger("shoot");
                 SoundPlayer.regit.sorse.PlayOneShot(clip);
-                relod = true;
                 RaycastHit hit;
                 Ray ray = new Ray(transform.position, transform.forward);
                 if (Physics.Raycast(ray, out hit))
@@ -66,26 +64,21 @@ public class Gun : MonoBehaviour
             else
             {
                 Interface.rid.NullBK();
-            }
-        }   
+            }   
     }
+
+
     public void Damage()
     {
         if (helse > 1)
         {
             SoundPlayer.regit.sorse.PlayOneShot(damage);
-            relod = true;
-            anim.SetBool("Damage", true);
+            anim.SetTrigger("damage");
             helse -= Random.Range(1,3);
         }
         else
         {
             Ded();
         }
-    }
-    public void Reload() {
-        anim.SetBool("Shut", false);
-        relod = false;
-        anim.SetBool("Damage", false);
     }
 }

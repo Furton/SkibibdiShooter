@@ -86,6 +86,7 @@ public class Interface : MonoBehaviour
         {
             data.bulets = 20;
         }
+        data.tempRecord = 1;
 
     }
 
